@@ -57,7 +57,9 @@ object ShapelessBuild extends Build {
       (unmanagedSourceDirectories in Test) := Nil,
 
       publish := (),
-      publishLocal := ()
+      publishLocal := (),
+
+      test in assembly := {}
     )
   )
 
@@ -117,7 +119,9 @@ object ShapelessBuild extends Build {
           setNextVersion,
           commitNextVersion,
           pushChanges
-        )
+        ),
+
+        test in assembly := {}
       )
     )
 
