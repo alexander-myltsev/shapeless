@@ -59,7 +59,9 @@ object ShapelessBuild extends Build {
     Project(
       id = "shapeless-core", 
       base = file("core"),
-      settings = commonSettings ++ Publishing.settings ++ osgiSettings ++ buildInfoSettings ++ releaseSettings ++ Seq(
+      settings = commonSettings ++ Publishing.settings ++ scala.scalajs.sbtplugin.ScalaJSPlugin.scalaJSSettings ++ bintray.Plugin.bintrayPublishSettings ++ osgiSettings ++ buildInfoSettings ++ releaseSettings ++ Seq(
+        licenses += ("Apache-2.0", url("http://www.apache.org/licenses/")),
+
         moduleName := "shapeless",
         
         managedSourceDirectories in Test := Nil,
@@ -161,7 +163,7 @@ object ShapelessBuild extends Build {
 
   def commonSettings = Defaults.defaultSettings ++
     Seq(
-      organization        := "com.chuusai",
+      organization        := "name.myltsev",
       scalaVersion        := "2.11.0",
 
       (unmanagedSourceDirectories in Compile) <<= (scalaSource in Compile)(Seq(_)),
