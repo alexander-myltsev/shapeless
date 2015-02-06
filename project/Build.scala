@@ -34,6 +34,8 @@ import sbtrelease.ReleasePlugin.ReleaseKeys._
 import sbtrelease.ReleaseStateTransformations._
 import sbtrelease.Utilities._
 
+import org.scalajs.sbtplugin.ScalaJSPlugin
+
 object ShapelessBuild extends Build {
   
   override lazy val settings = super.settings :+ (
@@ -59,7 +61,7 @@ object ShapelessBuild extends Build {
     Project(
       id = "shapeless-core", 
       base = file("core"),
-      settings = commonSettings ++ Publishing.settings ++ scala.scalajs.sbtplugin.ScalaJSPlugin.scalaJSSettings ++ bintray.Plugin.bintrayPublishSettings ++ osgiSettings ++ buildInfoSettings ++ releaseSettings ++ Seq(
+      settings = commonSettings ++ Publishing.settings ++ ScalaJSPlugin.projectSettings ++ bintray.Plugin.bintrayPublishSettings ++ osgiSettings ++ buildInfoSettings ++ releaseSettings ++ Seq(
         licenses += ("Apache-2.0", url("http://www.apache.org/licenses/")),
 
         moduleName := "shapeless",
@@ -115,7 +117,7 @@ object ShapelessBuild extends Build {
           pushChanges
         )
       )
-    )
+    ).enablePlugins(ScalaJSPlugin)
 
   lazy val shapelessExamples = Project(
     id = "shapeless-examples",
