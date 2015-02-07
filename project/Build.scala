@@ -34,7 +34,7 @@ import sbtrelease.ReleasePlugin.ReleaseKeys._
 import sbtrelease.ReleaseStateTransformations._
 import sbtrelease.Utilities._
 
-import scala.scalajs.sbtplugin.ScalaJSPlugin.{scalaJSSettings, scalaJSVersion}
+import org.scalajs.sbtplugin.ScalaJSPlugin
 
 object ShapelessBuild extends Build {
   
@@ -61,7 +61,7 @@ object ShapelessBuild extends Build {
     Project(
       id = "shapeless-core", 
       base = file("core"),
-      settings = commonSettings ++ Publishing.settings ++ scalaJSSettings ++ bintray.Plugin.bintrayPublishSettings ++ osgiSettings ++ buildInfoSettings ++ releaseSettings ++ Seq(
+      settings = commonSettings ++ Publishing.settings ++ ScalaJSPlugin.projectSettings ++ bintray.Plugin.bintrayPublishSettings ++ osgiSettings ++ buildInfoSettings ++ releaseSettings ++ Seq(
         licenses += ("Apache-2.0", url("http://www.apache.org/licenses/")),
 
         moduleName := "shapeless",
@@ -120,10 +120,10 @@ object ShapelessBuild extends Build {
         // NOTE: Need this workaround. Look at https://github.com/scala-js/scala-js/issues/801#issuecomment-54609475
         libraryDependencies ~= { libs =>
           libs.filterNot { _.name == "scalajs-library" } :+ 
-            ("org.scala-lang.modules.scalajs" % "scalajs-library_2.10" % scalaJSVersion)
+            ("org.scala-js" % "scalajs-library_2.10" % ScalaJSPlugin.AutoImport.scalaJSVersion)
         }
       )
-    )
+    ).enablePlugins(ScalaJSPlugin)
 
   lazy val shapelessExamples = Project(
     id = "shapeless-examples",
