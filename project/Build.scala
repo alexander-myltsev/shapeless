@@ -32,6 +32,8 @@ import sbtrelease.ReleasePlugin.ReleaseKeys._
 import sbtrelease.ReleaseStateTransformations._
 import sbtrelease.Utilities._
 
+import org.scalajs.sbtplugin.ScalaJSPlugin
+
 object ShapelessBuild extends Build {
 
   lazy val shapeless = Project(
@@ -53,7 +55,10 @@ object ShapelessBuild extends Build {
     Project(
       id = "shapeless-core",
       base = file("core"),
-      settings = commonSettings ++ Publishing.settings ++ osgiSettings ++ buildInfoSettings ++ releaseSettings ++ Seq(
+      settings = commonSettings ++ Publishing.settings ++ ScalaJSPlugin.projectSettings ++ bintray.Plugin.bintrayPublishSettings ++
+                   osgiSettings ++ buildInfoSettings ++ releaseSettings ++ Seq(
+        licenses += ("Apache-2.0", url("http://www.apache.org/licenses/")),
+
         moduleName := "shapeless",
 
         managedSourceDirectories in Test := Nil,
@@ -103,7 +108,7 @@ object ShapelessBuild extends Build {
           pushChanges
         )
       )
-    )
+    ).enablePlugins(ScalaJSPlugin)
 
   lazy val shapelessScratch = Project(
     id = "shapeless-scratch",
@@ -167,7 +172,7 @@ object ShapelessBuild extends Build {
 
   def commonSettings =
     Seq(
-      organization        := "com.chuusai",
+      organization        := "name.myltsev",
       scalaVersion        := "2.11.5",
 
       (unmanagedSourceDirectories in Compile) <<= (scalaSource in Compile)(Seq(_)),
